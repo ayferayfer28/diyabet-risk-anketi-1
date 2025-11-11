@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diyabet Riskinizi Biliyor Musunuz?</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f9fc;
+      color: #002b5c;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #ffffff;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    header img {
+      height: 60px;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.8em;
+      color: #003366;
+    }
+    form {
+      max-width: 600px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    button {
+      background-color: #004b8d;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0066cc;
+    }
+    #result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+    .low { color: green; }
+    .medium { color: orange; }
+    .high { color: red; }
+    footer {
+      text-align: center;
+      margin: 40px 0;
+      font-size: 1em;
+    }
+    a.phone {
+      display: inline-block;
+      margin-top: 10px;
+      background-color: #004b8d;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    a.phone:hover {
+      background-color: #0066cc;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Ac%C4%B1badem_Healthcare_Group_logo.png" alt="Acıbadem Logo">
+  </header>
+
+  <h1>Diyabet Riskinizi Biliyor Musunuz?</h1>
+
+  <form id="riskForm">
+    <label>Yaşınız</label>
+    <input type="number" id="age" min="1" max="120" required>
+
+    <label>Kilonuz (kg)</label>
+    <input type="number" id="weight" min="30" max="250" required>
+
+    <label>Boyunuz (cm)</label>
+    <input type="number" id="height" min="100" max="220" required>
+
+    <label>Ailenizde diyabet öyküsü var mı?</label>
+    <select id="family">
+      <option value="0">Hayır</option>
+      <option value="5">Evet</option>
+    </select>
+
+    <label>Fiziksel aktivite düzeyiniz</label>
+    <select id="activity">
+      <option value="0">Yüksek (günde 30 dk veya daha fazla)</option>
+      <option value="3">Orta</option>
+      <option value="5">Düşük</option>
+    </select>
+
+    <label>Tansiyon tanınız var mı?</label>
+    <select id="bp">
+      <option value="0">Hayır</option>
+      <option value="5">Evet</option>
+    </select>
+
+    <label>Sigara kullanıyor musunuz?</label>
+    <select id="smoke">
+      <option value="0">Hayır</option>
+      <option value="3">Evet</option>
+    </select>
+
+    <button type="button" onclick="calculateRisk()">Sonucu Göster</button>
+  </form>
+
+  <div id="result"></div>
+
+  <footer>
+    <p>Detaylı değerlendirme için bizimle iletişime geçin:</p>
+    <a class="phone" href="tel:02124044444">📞 0212 404 44 44</a>
+  </footer>
+
+  <script>
+    function calculateRisk() {
+      const age = parseInt(document.getElementById('age').value) || 0;
+      const weight = parseInt(document.getElementById('weight').value) || 0;
+      const height = parseInt(document.getElementById('height').value) || 1;
+      const bmi = weight / ((height / 100) ** 2);
+      const family = parseInt(document.getElementById('family').value);
+      const activity = parseInt(document.getElementById('activity').value);
+      const bp = parseInt(document.getElementById('bp').value);
+      const smoke = parseInt(document.getElementById('smoke').value);
+
+      let score = 0;
+      if (age > 45) score += 5;
+      if (bmi > 25) score += 5;
+      score += family + activity + bp + smoke;
+
+      let resultText = '';
+      let cssClass = '';
+
+      if (score <= 7) {
+        resultText = 'Düşük Risk';
+        cssClass = 'low';
+      } else if (score <= 14) {
+        resultText = 'Orta Risk';
+        cssClass = 'medium';
+      } else {
+        resultText = 'Yüksek Risk';
+        cssClass = 'high';
+      }
+
+      document.getElementById('result').innerHTML = `<p class="${cssClass}">${resultText}</p>`;
+    }
+  </script>
+</body>
+</html>
