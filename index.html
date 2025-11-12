@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diyabet Riskinizi Biliyor Musunuz?</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f9fc;
+      color: #002b5c;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #ffffff;
+      text-align: center;
+      padding: 15px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    header img {
+      height: 70px;
+      width: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.8em;
+      color: #003366;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+
+    button {
+      background-color: #004b8d;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0066cc;
+    }
+
+    #result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
+    .low { color: green; }
+    .medium { color: orange; }
+    .high { color: red; }
+
+    footer {
+      text-align: center;
+      margin: 40px 0;
+      font-size: 1em;
+    }
+
+    a.phone {
+      display: inline-block;
+      margin-top: 10px;
+      background-color: #004b8d;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    a.phone:hover {
+      background-color: #0066cc;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Ac%C4%B1badem_Grup_logo.svg" 
+         alt="Acıbadem Üniversitesi Atakent Hastanesi">
+  </header>
+
+  <h1>Diyabet Riskinizi Biliyor Musunuz?</h1>
+
+  <form id="riskForm" 
+        action="https://script.google.com/macros/s/AKfycbwDVquGsvt-KOCmkbQSNwadAQgh_Ws8dIxbefcTGqRKHh3v2PeQKEiPNws11QzvFoV/exec" 
+        method="POST" 
+        onsubmit="submitForm(event)">
+        
+    <label for="age">Yaşınız</label>
+    <input type="number" id="age" name="yas" min="1" max="120" required>
+
+    <label for="weight">Kilonuz (kg)</label>
+    <input type="number" id="weight" name="kilo" min="30" max="250" required>
+
+    <label for="height">Boyunuz (cm)</label>
+    <input type="number" id="height" name="boy" min="100" max="220" required>
+
+    <label for="family">Ailenizde diyabet öyküsü var mı?</label>
+    <select id="family" name="aileri">
+      <option value="0">Hayır</option>
+      <option value="5">Evet</option>
+    </select>
+
+    <label for="activity">Fiziksel aktivite düzeyiniz</label>
+    <select id="activity" name="aktivite">
+      <option value="0">Yüksek (günde 30 dk veya daha fazla)</option>
+      <option value="3">Orta</option>
+      <option value="5">Düşük</option>
+    </select>
+
+    <label for="bp">Tansiyon tanınız var mı?</label>
+    <select id="bp" name="tansiyon">
+      <option value="0">Hayır</option>
+      <option value="5">Evet</option>
+    </select>
+
+    <label for="smoke">Sigara kullanıyor musunuz?</label>
+    <select id="smoke" name="sigara">
+      <option value="0">Hayır</option>
+      <option value="3">Evet</option>
+    </select>
+
+    <button type="submit">Sonucu Gönder</button>
+  </form>
+
+  <div id="result"></div>
+
+  <footer>
+    <p>Detaylı değerlendirme için bizimle iletişime geçin:</p>
+    <a class="phone" href="tel:02124044444">📞 0212 404 44 44</a>
+  </footer>
+
+  <script>
+    function calculateRisk() {
+      const age = parseInt(document.getElementById('age').value) || 0;
+      const weight = parseInt(document.getElementById('weight').value) || 0;
+      const height = parseInt(document.getElementById('height').value) || 1;
+      const bmi = (weight / ((height / 100) ** 2));
+      const family = parseInt(document.getElementById('family').value);
+      const activity = parseInt(document.getElementById('activity').value);
+      const bp = parseInt(document.getElementById('bp').value);
+      const smoke = parseInt(document.getElementById('smoke').value);
+
+      let score = 0;
+      if (age > 45) score += 5;
+      if (bmi > 25) score += 5;
+      score += family + activity + bp + smoke;
+
+      let resultText = '';
+      let cssClass = '';
+
+      if (score <= 7) {
+        resultText = 'Düşük Risk';
+        cssClass = 'low';
+      } else if (score <= 14) {
+        resultText = 'Orta Risk';
+        cssClass = 'medium';
+      } else {
+        resultText = 'Yüksek Risk';
+        cssClass = 'high';
+      }
+
+      document.getElementById('result').innerHTML = `<p class="${cssClass}">${resultText}</p>`;
+      return resultText;
+    }
+
+    function submitForm(e) {
+      e.preventDefault();
+
+      const form = document.getElementById("riskForm");
+      const result = calculateRisk(); // Risk hesapla
+
+      const data = {
+        tarih: new Date().toLocaleString(),
+        yas: document.getElementById('age').value,
+        kilo: document.getElementById('weight').value,
+        boy: document.getElementById('height').value,
+        aktivite: document.getElementById('activity').value,
+        tansiyon: document.getElementById('bp').value,
+        sigara: document.getElementById('smoke').value,
+        risk: result
+      };
+
+      fetch(form.action, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => response.json())
+      .then(() => {
+        alert("Veri başarıyla kaydedildi ✅");
+        form.reset();
+        document.getElementById('result').innerHTML = "";
+      })
+      .catch(() => {
+        alert("Bir hata oluştu ❌");
+      });
+    }
+  </script>
+</body>
+</html>
